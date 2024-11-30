@@ -1,6 +1,6 @@
-import { User } from '../entity/user';
+import { UserEntity } from '../entity/user.entity';
 
 export class ReturnUserDto {
-  user: User;
+  user: UserEntity;
   message: string;
 }

@@ -1,16 +1,17 @@
 import {
   BaseEntity,
-  Entity,
   Column,
-  Unique,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity('users')
 @Unique(['email'])
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -18,7 +19,7 @@ export class User extends BaseEntity {
   email: string;
 
   @Column({ nullable: false, type: 'varchar', length: 200 })
-  nome: string;
+  name: string;
 
   @Column({ nullable: false, type: 'varchar', length: 20 })
   role: string;
@@ -43,4 +44,9 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  async checkPassword(password: string): Promise<boolean> {
+    const hash = await bcrypt.hash(password, this.salt);
+    return hash === this.password;
+  }
 }
